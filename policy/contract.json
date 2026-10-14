@@ -1,0 +1,25 @@
+{
+  "namespace": "confidential-inference",
+  "pod_name": "whisper-cpu-gateway-bound",
+  "container_name": "gateway",
+  "oci_version": "1.3.0",
+  "command": [
+    "python",
+    "/app/api.py"
+  ],
+  "environment": {
+    "GPU_URL": "http://whisper-gpu-prototype:8080",
+    "AMD_KDS_ENABLED": "true"
+  },
+  "security_context": {
+    "runAsUser": 1000,
+    "runAsGroup": 1000,
+    "allowPrivilegeEscalation": false,
+    "readOnlyRootFilesystem": true,
+    "capabilities": {
+      "drop": [
+        "ALL"
+      ]
+    }
+  }
+}

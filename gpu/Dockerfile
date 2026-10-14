@@ -12,6 +12,7 @@ COPY gpu/prepare_model.py /build/prepare_model.py
 RUN python /build/prepare_model.py
 
 FROM dependencies
+LABEL org.opencontainers.image.source="https://github.com/kiz-speeches/whisper-confidential"
 ENV NVIDIA_VISIBLE_DEVICES=all NVIDIA_DRIVER_CAPABILITIES=compute,utility \
     WHISPER_MODEL_PATH=/opt/whisper-model \
     LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/nvidia/cublas/lib:/usr/local/lib/python3.12/site-packages/nvidia/cudnn/lib

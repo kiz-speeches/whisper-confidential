@@ -8,17 +8,33 @@ on:
         type: string
 permissions:
   contents: write
+concurrency:
+  group: whisper-private-release
+  cancel-in-progress: false
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: sec-runner
     timeout-minutes: 90
     steps:
     - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       with: {fetch-depth: 0}
+    - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+      with: {python-version: '3.14'}
+    - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+    - name: Validate release identity
+      env:
+        RELEASE_VERSION: ${{ inputs.version }}
+      run: |
+        test "$GITHUB_REF" = refs/heads/main
+        python3 -c 'import os,re; assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?",os.environ["RELEASE_VERSION"]), "Invalid release version"'
     - name: Rebuild twice and compare platform digests
       env:
         RELEASE_VERSION: ${{ inputs.version }}
       run: python3 tools/build.py --version "$RELEASE_VERSION" --repeat
+    - name: Publish Harbor digests and CPU policy release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: python3 tools/publish.py
     - name: Upload manifest and checksums
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
       with:
@@ -29,12 +45,9 @@ jobs:
           .build/dist/SHA256SUMS
           .build/dist/build-*/cpu-build.json
           .build/dist/build-*/gpu-build.json
+          .build/dist/policy.rego
+          .build/dist/initdata.toml
+          .build/dist/attestation-policy.json
+          .build/dist/policy-input.json
+          .build/dist/policy-settings.json
         if-no-files-found: error
-    - name: Attach manifest to a private draft release
-      env:
-        GH_TOKEN: ${{ github.token }}
-        RELEASE_VERSION: ${{ inputs.version }}
-      run: |
-        python3 -c 'import os,re; assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?",os.environ["RELEASE_VERSION"]), "Invalid release version"'
-        gh release create "$RELEASE_VERSION" .build/dist/release-manifest.json .build/dist/SHA256SUMS \
-          --draft --target "$GITHUB_SHA" --title "$RELEASE_VERSION" --notes-file README.md

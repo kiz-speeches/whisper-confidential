@@ -23,7 +23,11 @@ CPU-Konfiguration: `GPU_URL` (GPU-API-Adresse), `AMD_KDS_ENABLED=true` für AMD-
 python3 tools/build.py --version v0.2.0-dev --repeat
 ```
 
-Der Build setzt einen sauberen Commit voraus und lädt ausschließlich hashgeprüfte Wheels. CPU- und GPU-Image werden mit festen Eingaben zweimal ohne Layer-Cache gebaut. Nur bei identischen Plattform-Digests entstehen `.build/dist/release-manifest.json` und `SHA256SUMS`. Das Manifest enthält Commit, Datei-Hashes, Paketversionen, Modellrevision und Image-Digests. `build/inputs.json` enthält außerdem die vorhandene CPU-Gast-Referenz als Prüfwert; dieser Gast wird hier nicht selbst gebaut. Der manuelle GitHub-Workflow hängt Manifest und Prüfsummen an einen Release-Entwurf. Für einen Vergleich die genaue Manifest-Version und den Commit des Releases verwenden:
+Mit `--repeat` werden beide Images zweimal gebaut und ihre Plattform-Digests verglichen; Abweichungen brechen den Build ab. Ein Aufruf ohne `--repeat` ist nur ein einzelner Entwicklungsbuild. Das Manifest enthält Commit, Datei-Hashes, Paketversionen, Modellrevision und Image-Digests. `build/inputs.json` enthält außerdem die vorhandene CPU-Gast-Referenz als Prüfwert; dieser Gast wird hier nicht selbst gebaut.
+
+Der manuelle Release-Workflow läuft auf `sec-runner`, baut zweimal und veröffentlicht öffentliche Images unter `harbor.speeches.dev/library/whisper-confidential-{cpu,gpu}`, ohne deren Digests zu verändern. Ein hashgeprüfter Kata-3.32-Generator erzeugt anschließend `policy.rego`, `initdata.toml` und `attestation-policy.json`. Diese Dateien und das Manifest werden an einen privaten Release-Entwurf angehängt. `policy/contract.json` ist der prüfbare API-Startvertrag, kein Cluster-Deployment. Build-/Policy-Werkzeuge landen nicht in den Laufzeit-Images. Policy-Erzeugung benötigt Python 3.14. Der Registry-Präfix steht in `build/inputs.json`; Zugangsdaten stammen ausschließlich aus dem Runner und werden nicht veröffentlicht.
+
+Für einen Vergleich die genaue Manifest-Version und den Commit des Releases verwenden:
 
 ```sh
 python3 tools/release.py verify --manifest /pfad/release-manifest.json \
@@ -34,4 +38,8 @@ Für direkte Dockerfile-Builds sind außerdem die erzeugte `.build/build-info.js
 
 ## Aktuelle Sicherheitsgrenze
 
-CPU-Evidence und Sitzungsschlüssel werden bereitgestellt; der externe Client muss sie selbst prüfen. Die GPU verarbeitet derzeit Klartext ohne CC, und die CPU leitet Audio über HTTP an sie weiter. Durchgesetzte Anwendungspolicy, HOST_DATA-Bindung und GPU-Attestation fehlen weiterhin. Release-Metadaten sind ausdrücklich nicht attestiert. Gleiche Image-Hashes beweisen noch nicht, welches Image der Cluster ausführt. GHCR-Veröffentlichung und Deployment werden separat eingerichtet.
+CPU-Evidence und Sitzungsschlüssel werden bereitgestellt; der externe Client muss sie selbst prüfen. Für eine gebundene CPU-Anwendung muss das externe Deployment die unveränderte `initdata.toml` laden. Der Client vergleicht den signierten SNP-`HOST_DATA` mit dem aus einem vertrauenswürdig bezogenen Release stammenden Wert in `attestation-policy.json`. SHA256 bezieht sich auf die exakten unkomprimierten TOML-Bytes. Den Erwartungswert niemals einfach aus der Serverantwort übernehmen.
+
+Die Policy bindet Image-Digest, Startbefehl, Umgebungswerte und schreibgeschütztes Root-Dateisystem. Nachträgliches Exec und Policy-Wechsel sind verboten. Beim erzwungenen Gast-Pull wird die konkrete Image-Quelle zusätzlich geprüft. Kopieren ist nur für begrenzte DNS-/Hostname-/K3s-Startdateien erlaubt, nicht für Anwendungscode oder Schlüssel. Generierte Dateien allein beweisen keine aktive Durchsetzung; das externe Deployment muss auch mit Negativtests geprüft werden.
+
+Die GPU verarbeitet weiterhin Klartext ohne CC, und die CPU leitet Audio über HTTP an sie weiter. GPU-Attestation fehlt. Server-Metadaten werden nicht automatisch als verifiziert markiert; gleiche Image-Hashes allein beweisen nicht, welches Image der Cluster ausführt.

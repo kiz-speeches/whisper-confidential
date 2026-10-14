@@ -35,5 +35,12 @@
     "kernel_sha256": "85ac495fce6bb6ee01206c8e022b65acad45ca3fcc2729ba377af33943c8b05e",
     "guest_image_sha256": "240d9df4514472a7467afab6d99e6544667a0c3f05a54a2eaef60f45e40f1aea",
     "origin": "administrator-recorded existing reference; not a claim of independently reproduced VM measurement"
-  }
+  },
+  "registry_copy_image": "quay.io/skopeo/stable@sha256:22ea3c3baf639147b07fb9f2ea28a6308edf7909e919d91a5d296af0121d7ed9",
+  "policy_tools": {
+    "version": "3.32.0",
+    "url": "https://github.com/kata-containers/kata-containers/releases/download/3.32.0/kata-tools-static-3.32.0-amd64.tar.zst",
+    "sha256": "f11a49d7a15f81a7ec3289293fa44ebe9c29610b6578535b35f1d604f22d6015"
+  },
+  "registry_prefix": "harbor.speeches.dev/library/whisper-confidential"
 }
