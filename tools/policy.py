@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Create reviewable SNP Init-Data from the exact released CPU image."""
-import argparse, hashlib, json, os, subprocess, tarfile, urllib.request
+import argparse, hashlib, json, os, re, subprocess, tarfile, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -9,6 +9,17 @@ def harden(policy, image):
     marker = '    allow_create_container_input\n'
     if policy.count(marker) != 1 or policy.count('CopyFileRequest if {') != 1:
         raise ValueError('Unexpected genpolicy rules; review the pinned generator')
+    if policy.count('policy_data := ') != 1:
+        raise ValueError('Unexpected genpolicy data format')
+    rules, encoded = policy.split('policy_data := ', 1)
+    data = json.loads(encoded)
+    # genpolicy defaults unknown image users to supplementary group 0. The
+    # declared API user and K3s runtime have only their explicit group 1000.
+    for container in data['containers']:
+        user = container['OCI']['Process']['User']
+        if user['UID'] == 1000:
+            user['AdditionalGids'] = [1000]
+    policy = rules+'policy_data := '+json.dumps(data,sort_keys=True,indent=2)+'\n'
     policy = policy.replace(marker, marker+'    whisper_image_sources_allowed\n', 1)
     policy = policy.replace('CopyFileRequest if {', 'CopyFileRequest if {\n'
                             '    input.file_type == "Regular"\n'
@@ -68,7 +79,8 @@ def generate(manifest_path, output, tools=None):
     for section in ('pause_container', 'other_container'):
         settings[section]['Annotations']['io.katacontainers.pkg.oci.bundle_path'] = (
             '/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io/$(bundle-id)')
-    settings['request_defaults']['CreateContainerRequest']['allow_env_regex'] = []
+    settings['request_defaults']['CreateContainerRequest']['allow_env_regex'] = [
+        '^'+re.escape(value)+'$' for value in contract['platform_environment']]
     settings['request_defaults']['CopyFileRequest'] = ['$(sfprefix)(resolv\\.conf|hosts|hostname|termination-log)$']
     settings['request_defaults']['ExecProcessRequest'] = {'allowed_commands': [], 'regex': []}
     # This is the generator's security input, not the operational cluster deployment.
