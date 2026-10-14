@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "design_constraints_not_enforced",
+  "required_controls": {
+    "container_images": "release manifest digest allowlist",
+    "exec_process": "deny after startup",
+    "copy_file": "deny after startup",
+    "host_mounts": "deny mutable code, keys and model mounts",
+    "configuration": "bind command, environment and permitted mounts",
+    "model": "verify every pinned model file before loading",
+    "cpu_to_gpu": "authenticated encrypted channel between attested endpoints"
+  },
+  "agent_policy": null,
+  "expected_host_data": null,
+  "note": "This is a reviewable target specification, not a Kata policy. A reviewed genpolicy output and actual enforcement/negative tests must precede any workload_verified claim."
+}

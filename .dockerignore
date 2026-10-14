@@ -1,0 +1,12 @@
+evidence
+.git
+.github
+release/wheels
+release/dist
+attestation/build
+tests/__pycache__
+__pycache__
+*.pyc
+README.md
+smoke-browser.cjs
+k8s

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+evidence/
+attestation/build/
+release/wheels/
+release/dist/
+static/build-info.json
+*.oci.tar
+.env
+.env.*
+!.env.example
+

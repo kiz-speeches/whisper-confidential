@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisper-cpu-gateway
+  namespace: confidential-inference
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector:
+    matchLabels: {app: whisper-cpu-gateway}
+  template:
+    metadata:
+      labels: {app: whisper-cpu-gateway}
+      annotations:
+        io.katacontainers.config.hypervisor.kernel_params: "agent.guest_components_rest_api=all agent.log=info"
+    spec:
+      runtimeClassName: kata-qemu-snp
+      nodeSelector: {kubernetes.io/hostname: sec2}
+      automountServiceAccountToken: false
+      initContainers:
+      - name: dependencies
+        image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+        command: [bash, /source/bootstrap.sh]
+        resources:
+          requests: {cpu: "500m", memory: 512Mi}
+          limits: {cpu: "2", memory: 2Gi}
+        volumeMounts:
+        - {name: source, mountPath: /source, readOnly: true}
+        - {name: runtime, mountPath: /runtime}
+      containers:
+      - name: gateway
+        image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+        command: [/runtime/venv/bin/python, /runtime/app/gateway.py]
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          capabilities: {drop: [ALL]}
+        env:
+        - {name: GPU_URL, value: "http://whisper-gpu-prototype:8080"}
+        - {name: AMD_KDS_ENABLED, value: "true"}
+        resources:
+          requests: {cpu: "500m", memory: 512Mi}
+          limits: {cpu: "2", memory: 2Gi}
+        ports: [{name: http, containerPort: 8080}]
+        startupProbe:
+          httpGet: {path: /health, port: http}
+          periodSeconds: 10
+          failureThreshold: 60
+        readinessProbe:
+          httpGet: {path: /health, port: http}
+          periodSeconds: 10
+        volumeMounts:
+        - {name: runtime, mountPath: /runtime}
+        - {name: cpu-policy, mountPath: /runtime/app/static/attestation-policy.json, subPath: attestation-policy.json, readOnly: true}
+      volumes:
+      - name: cpu-policy
+        configMap: {name: whisper-cpu-policy}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whisper-cpu-gateway
+  namespace: confidential-inference
+spec:
+  selector: {app: whisper-cpu-gateway}
+  ports: [{name: http, port: 8080, targetPort: http}]

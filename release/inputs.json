@@ -1,0 +1,41 @@
+{
+  "platform": "linux/amd64",
+  "python_base": "python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b",
+  "go_builder": "golang:1.26.8-bookworm@sha256:dc9ad6c05acc7a88e5b71bde60a5fe3bd4b9f0db209011711b464107438a8107",
+  "model": {
+    "repository": "Systran/faster-whisper-small",
+    "revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "files": [
+      {
+        "path": "config.json",
+        "sha256": "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828",
+        "git_blob_sha1": "e5047537059bd8f182d9ca64c470201585015187"
+      },
+      {
+        "path": "model.bin",
+        "sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671",
+        "git_blob_sha1": "504a7fe023f19460564a623887a9f77ea53ac708"
+      },
+      {
+        "path": "tokenizer.json",
+        "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+        "git_blob_sha1": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+      },
+      {
+        "path": "vocabulary.txt",
+        "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913",
+        "git_blob_sha1": "c9074644d9d1205686f16d411564729461324b75"
+      }
+    ]
+  },
+  "test_audio_sha256": "63a4b1e4c1dc655ac70961ffbf518acd249df237e5a0152faae9a4a836949715",
+  "cpu_guest_reference": {
+    "kata_release": "3.32.0",
+    "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
+    "ovmf_sha256": "d9bbf4c9279c89e4dfc7b90d8a1d42440bc9b8022a9cdb86ab4d5449b51892a7",
+    "kernel_sha256": "85ac495fce6bb6ee01206c8e022b65acad45ca3fcc2729ba377af33943c8b05e",
+    "guest_image_sha256": "240d9df4514472a7467afab6d99e6544667a0c3f05a54a2eaef60f45e40f1aea",
+    "origin": "administrator-recorded existing reference; not a claim of independently reproduced VM measurement"
+  },
+  "buildkit_image": "moby/buildkit:v0.30.0@sha256:0168606be2315b7c807a03b3d8aa79beefdb31c98740cebdffdfeebf31190c9f"
+}
