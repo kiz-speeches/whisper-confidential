@@ -12,6 +12,8 @@ python3 tools/build.py --version v0.1.0 --repeat
 
 Das baut CPU-Gateway und GPU-Worker zweimal ohne Layer-Cache mit derselben festgelegten BuildKit-Version. Der Ablauf setzt `SOURCE_DATE_EPOCH` auf die Commit-Zeit und normalisiert Exportzeitstempel. Die Prüfung vergleicht die OCI-Plattform-Manifeste. Ausführungszeit und Signaturen späterer Provenance-Dokumente gehören nicht in diesen Vergleich. Derselbe Quellcode allein garantiert keine gleichen Digests; Gleichheit wird tatsächlich geprüft, und eine Abweichung bricht den Build ab.
 
+Vorher werden fehlende Wheels einmal hashgeprüft nach `release/wheels/` geladen und als benannter Build-Kontext eingebunden. Beide Image-Builds installieren dann offline aus diesen festen Eingabedateien. Die Dockerfiles werden über `tools/build.py` aufgerufen; ein direkter Dockerfile-Aufruf benötigt zusätzlich den passenden `--build-context wheels=...` und die erzeugte `static/build-info.json`.
+
 Ausgaben unter `release/dist/`:
 
 - `release-manifest.json`: Git-Commit, Quellbaumhash und Datei-Hashes, Paketversionen, Modell-/Policy-/Gast-Referenzen sowie Digests der gebauten Images.

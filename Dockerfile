@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 HF_HUB_DISABLE_TELEMETRY=1 DO_N
     LD_LIBRARY_PATH=/usr/local/lib/python3.12/site-packages/nvidia/cublas/lib:/usr/local/lib/python3.12/site-packages/nvidia/cudnn/lib
 WORKDIR /app
 COPY release/gpu-requirements.lock /app/requirements.lock
-RUN pip install --no-cache-dir --no-compile --only-binary=:all: --require-hashes -r requirements.lock
+RUN --mount=from=wheels,target=/wheels pip install --no-cache-dir --no-compile --no-index --find-links=/wheels --only-binary=:all: --require-hashes -r requirements.lock
 COPY release/inputs.json /app/release/inputs.json
 COPY tests/fixtures/jfk.flac /app/tests/fixtures/jfk.flac
 COPY prepare_model.py /app/prepare_model.py

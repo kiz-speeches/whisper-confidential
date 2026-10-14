@@ -8,7 +8,7 @@ ARG SOURCE_DATE_EPOCH
 ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 COPY attestation/requirements.lock /app/requirements.txt
-RUN pip install --no-cache-dir --no-compile --only-binary=:all: --require-hashes -r requirements.txt
+RUN --mount=from=wheels,target=/wheels pip install --no-cache-dir --no-compile --no-index --find-links=/wheels --only-binary=:all: --require-hashes -r requirements.txt
 COPY attestation/gateway.py attestation/evidence.py /app/
 COPY static/ /app/static/
 COPY --from=verifier /out/ /app/static/attestation/
