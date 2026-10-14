@@ -28,18 +28,18 @@ def packages(path):
 def prepare(version):
     if git('status','--porcelain'):
         raise ValueError('Release builds require a clean committed checkout')
-    inputs = json.loads((ROOT/'release/inputs.json').read_text())
+    inputs = json.loads((ROOT/'build/inputs.json').read_text())
     source = inventory()
     result = {'schema_version': 1, 'version': version, 'git_commit': git('rev-parse','HEAD'),
               'source_date_epoch': int(git('show','-s','--format=%ct','HEAD')),
               'source_tree_sha256': hashlib.sha256(canonical(source)).hexdigest(),
               'source_files': source, 'build_inputs': inputs,
-              'versions': {'cpu_packages': packages(ROOT/'attestation/requirements.lock'),
-                           'gpu_packages': packages(ROOT/'release/gpu-requirements.lock'),
-                           'browser_verifier_go': '1.26.8'},
+              'versions': {'cpu_packages': packages(ROOT/'cpu/requirements.lock'),
+                           'gpu_packages': packages(ROOT/'gpu/requirements.lock')},
               'attestation': {'workload_policy_enforced': False, 'expected_host_data': None,
                               'gpu_evidence': None, 'software_versions_verified': False}}
-    (ROOT/'static/build-info.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'.build').mkdir(exist_ok=True)
+    (ROOT/'.build/build-info.json').write_text(json.dumps(result,indent=2)+'\n')
     print(result['source_tree_sha256'])
 
 def image_digest(path):
@@ -75,7 +75,7 @@ def image_digest(path):
         return descriptor['digest']
 
 def finalize(cpu, gpu, output):
-    info = json.loads((ROOT/'static/build-info.json').read_text())
+    info = json.loads((ROOT/'.build/build-info.json').read_text())
     if git('status','--porcelain') or info['git_commit'] != git('rev-parse','HEAD'):
         raise ValueError('Source changed since prepare')
     if info['source_tree_sha256'] != hashlib.sha256(canonical(inventory())).hexdigest():

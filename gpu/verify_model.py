@@ -3,7 +3,7 @@ import hashlib,json
 from pathlib import Path
 def verify_model(root: Path, inputs: Path):
     expected=json.loads(inputs.read_text())['model']['files']
-    permitted={entry['path'] for entry in expected}|{'manifest.json','jfk.flac'}
+    permitted={entry['path'] for entry in expected}
     if any(p.name not in permitted for p in root.iterdir()):
         raise RuntimeError('Unexpected model directory content')
     for entry in expected:

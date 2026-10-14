@@ -6,6 +6,8 @@ import hashlib
 import json
 import secrets
 import unittest
+import sys
+from pathlib import Path
 from unittest.mock import patch, AsyncMock
 
 import httpx
@@ -14,7 +16,8 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from fastapi.testclient import TestClient
-import gateway
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent/'cpu'))
+import api as gateway
 
 
 class Backend:
@@ -106,6 +109,10 @@ class Protocol(unittest.TestCase):
         self.assertNotIn('evidence', response.json())
         self.assertEqual(set(gateway.sessions), existing)
         self.assertEqual(self.backend.audio, [])
+
+    def test_api_does_not_serve_frontend_or_interactive_docs(self):
+        for path in ('/', '/static/index.html', '/docs', '/redoc', '/openapi.json'):
+            self.assertEqual(self.browser.get(path).status_code, 404, path)
 
 
 if __name__ == '__main__':

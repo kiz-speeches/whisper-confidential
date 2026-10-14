@@ -1,19 +1,15 @@
 """GPU transcription prototype. Does not provide confidential computing."""
 import io
-import json
 import os
 import threading
 import time
-import urllib.request
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 import ctranslate2
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from faster_whisper import WhisperModel
-from huggingface_hub import snapshot_download
+from verify_model import verify_model
 
 MODEL_REVISION = "536b0662742c02347bc0e980a01041f333bce120"
 ROOT = Path(__file__).parent
@@ -43,37 +39,14 @@ async def lifespan(app):
     if ctranslate2.get_cuda_device_count() != 1:
         raise RuntimeError("Expected exactly one allocated CUDA GPU")
     print("WHISPER-MODEL-LOAD device=cuda compute_type=float16", flush=True)
-    model_path = os.environ.get("WHISPER_MODEL_PATH") or snapshot_download(
-        repo_id="Systran/faster-whisper-small", revision=MODEL_REVISION,
-        allow_patterns=["model.bin", "config.json", "tokenizer.json", "vocabulary.*", "preprocessor_config.json"],
-    )
-    if os.environ.get('WHISPER_MODEL_PATH'):
-        from verify_model import verify_model
-        verify_model(Path(model_path), ROOT/'release/inputs.json')
+    model_path = os.environ.get('WHISPER_MODEL_PATH', '/opt/whisper-model')
+    verify_model(Path(model_path), ROOT/'model-inputs.json')
     model = WhisperModel(model_path, device="cuda", compute_type="float16", num_workers=1)
-    # Only a public upstream fixture is used and its transcript is not logged.
-    smoke_audio = os.environ.get("WHISPER_SMOKE_AUDIO")
-    if smoke_audio:
-        result = transcribe(Path(smoke_audio).read_bytes(), "en")
-    else:
-        with urllib.request.urlopen(
-            "https://raw.githubusercontent.com/openai/whisper/main/tests/jfk.flac", timeout=30,
-        ) as response:
-            result = transcribe(response.read(), "en")
-    if "country" not in result["text"].lower():
-        raise RuntimeError("CUDA transcription smoke test failed")
-    print(json.dumps({"event": "WHISPER-CUDA-SMOKE-OK", "seconds": result["processing_seconds"]}), flush=True)
     yield
     model = None
 
 
-app = FastAPI(title="Whisper GPU prototype", lifespan=lifespan)
-app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
-
-
-@app.get("/")
-def index():
-    return FileResponse(ROOT / "static" / "index.html")
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
 
 @app.get("/health")
@@ -109,4 +82,4 @@ def transcription(file: UploadFile = File(...), language: str = Form("auto")):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080, access_log=False)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get('PORT', '8080')), access_log=False)

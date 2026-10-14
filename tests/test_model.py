@@ -1,6 +1,6 @@
 import hashlib,json,sys,tempfile,unittest
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'gpu'))
 from verify_model import verify_model
 class ModelIntegrity(unittest.TestCase):
     def test_changed_or_additional_model_data_fails(self):

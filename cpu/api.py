@@ -15,14 +15,10 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from evidence import pack, b64
 
 ROOT = Path(__file__).parent
-STATIC = ROOT / 'static'
-if not STATIC.is_dir():
-    STATIC = ROOT.parent / 'static'
 GPU = os.environ.get('GPU_URL', 'http://whisper-gpu-prototype:8080')
 AA = 'http://127.0.0.1:8006/aa/evidence'
 DOMAIN = b'whisper-cpu-tee-v1'
@@ -35,7 +31,6 @@ quote_lock = asyncio.Lock()
 gpu_slots = asyncio.Semaphore(2)
 client = httpx.AsyncClient(timeout=150)
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
-app.mount('/static', StaticFiles(directory=STATIC), name='static')
 
 
 def decode(value, length=None):
@@ -79,18 +74,12 @@ async def headers(request, call_next):
     response.headers['Cache-Control'] = 'no-store'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['Referrer-Policy'] = 'no-referrer'
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
     return response
-
-
-@app.get('/')
-async def index():
-    return FileResponse(STATIC / 'index.html')
 
 
 def software_release():
     """Release metadata is informative until an enforced policy binds it to this workload."""
-    path = STATIC/'build-info.json'
+    path = ROOT/'build-info.json'
     if not path.is_file():
         return None
     return {'manifest': json.loads(path.read_text()), 'verified': False,
@@ -125,15 +114,15 @@ async def attest(request: Request):
     try:
         body = await request.json()
         nonce = decode(body['nonce'], 32)
-        browser_pub = decode(body['client_public_key'], 65)
-        peer = ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256R1(), browser_pub)
+        client_pub = decode(body['client_public_key'], 65)
+        peer = ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256R1(), client_pub)
     except (KeyError, ValueError, TypeError):
         raise HTTPException(400, 'Invalid attestation request')
     async with quote_lock:
         key = ec.generate_private_key(ec.SECP256R1())
         public = key.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
         sid = secrets.token_bytes(16)
-        binding = hashlib.sha256(DOMAIN+b'\0'+nonce+public+browser_pub+sid).hexdigest()
+        binding = hashlib.sha256(DOMAIN+b'\0'+nonce+public+client_pub+sid).hexdigest()
         try:
             response = await client.get(AA, params={'runtime_data': binding}, timeout=15)
             response.raise_for_status()
@@ -213,4 +202,4 @@ async def transcribe(request: Request):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8080, access_log=False)
+    uvicorn.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', '8080')), access_log=False)

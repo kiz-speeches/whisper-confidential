@@ -1,7 +1,6 @@
 {
   "platform": "linux/amd64",
   "python_base": "python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b",
-  "go_builder": "golang:1.26.8-bookworm@sha256:dc9ad6c05acc7a88e5b71bde60a5fe3bd4b9f0db209011711b464107438a8107",
   "model": {
     "repository": "Systran/faster-whisper-small",
     "revision": "536b0662742c02347bc0e980a01041f333bce120",
@@ -28,7 +27,7 @@
       }
     ]
   },
-  "test_audio_sha256": "63a4b1e4c1dc655ac70961ffbf518acd249df237e5a0152faae9a4a836949715",
+  "buildkit_image": "moby/buildkit:v0.30.0@sha256:0168606be2315b7c807a03b3d8aa79beefdb31c98740cebdffdfeebf31190c9f",
   "cpu_guest_reference": {
     "kata_release": "3.32.0",
     "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
@@ -36,6 +35,5 @@
     "kernel_sha256": "85ac495fce6bb6ee01206c8e022b65acad45ca3fcc2729ba377af33943c8b05e",
     "guest_image_sha256": "240d9df4514472a7467afab6d99e6544667a0c3f05a54a2eaef60f45e40f1aea",
     "origin": "administrator-recorded existing reference; not a claim of independently reproduced VM measurement"
-  },
-  "buildkit_image": "moby/buildkit:v0.30.0@sha256:0168606be2315b7c807a03b3d8aa79beefdb31c98740cebdffdfeebf31190c9f"
+  }
 }
