@@ -11,7 +11,7 @@ RUN --mount=from=wheels,target=/wheels pip install --no-cache-dir --no-compile -
 COPY release/inputs.json /app/release/inputs.json
 COPY tests/fixtures/jfk.flac /app/tests/fixtures/jfk.flac
 COPY prepare_model.py /app/prepare_model.py
-RUN python prepare_model.py
+RUN python prepare_model.py && rm -rf /root/.cache/huggingface
 COPY app.py /app/app.py
 COPY verify_model.py /app/verify_model.py
 COPY static /app/static

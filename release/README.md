@@ -29,7 +29,7 @@ python3 tools/release.py verify --manifest /pfad/zum/release-manifest.json \
 
 Die Image-Prüfung kontrolliert die Digests der referenzierten Konfiguration und jedes Layers. Die SHA256 einer gesamten Tar-Datei dient der Transportprüfung; für den unabhängigen Nachbau wird der Plattform-Image-Digest verglichen, weil Archivverpackung abweichen kann.
 
-Die Workflow-Datei `release.yml` kann über GitHub Actions manuell gestartet werden und lädt Manifest und Checksums als Workflow-Artefakt hoch. Sie veröffentlicht noch keine Images und erzeugt kein öffentliches Release. Registry-Ziel, Release-Signierung/Vertrauensanker und die Zuordnung zu einem Release-Tag müssen vor Veröffentlichung bewusst ergänzt werden. Ein Workflow-Artefakt allein ist kein unabhängig signierter Software-Release.
+Die Workflow-Datei `release.yml` kann über GitHub Actions manuell gestartet werden. Sie lädt Manifest und Checksums als Workflow-Artefakt hoch und hängt sie an einen Release-Entwurf für den tatsächlich gebauten Commit. Das Repository ist zunächst privat. Die Image-Archive bleiben lokal bzw. im Build; die Checksums enthalten auch deren Transportprüfsummen. Registry-Veröffentlichung und Release-Signierung/Vertrauensanker sind noch nicht eingerichtet. Ein Release-Entwurf allein ist kein unabhängig signierter Software-Release.
 
 ## Was für attestierte Anwendungsversionen noch fehlt
 
