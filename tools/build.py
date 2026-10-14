@@ -25,7 +25,7 @@ for pass_number in range(1,3 if args.repeat else 2):
         subprocess.run(['docker','buildx','build','--builder',args.builder,'--platform','linux/amd64','--no-cache',
           '--provenance=false','--sbom=false','--build-arg','SOURCE_DATE_EPOCH='+str(info['source_date_epoch']),
           '--output','type=oci,oci-mediatypes=true,rewrite-timestamps=true,dest='+str(image),
-          '--metadata-file',str(out/f'{name}-build.json'),'-f',dockerfile,str(ROOT)],check=True)
+          '--metadata-file',str(out/f'{name}-build.json'),'-f',str(ROOT/dockerfile),str(ROOT)],check=True)
         first=subprocess.check_output(['python3',str(ROOT/'tools/release.py'),'image-digest',str(ROOT/'release/dist/build-1'/f'{name}.oci.tar')],text=True).strip()
         current=subprocess.check_output(['python3',str(ROOT/'tools/release.py'),'image-digest',str(image)],text=True).strip()
         if first!=current:parser.error(f'{name} is not reproducible: {first} != {current}')
