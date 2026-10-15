@@ -1,0 +1,25 @@
+{
+  "tested_at": "2026-10-14T13:41:40.205692+00:00",
+  "release": "v0.2.0-policy",
+  "git_commit": "920aaa1cf3692a6c0a512178c34fe762443af869",
+  "pipeline": "https://github.com/kiz-speeches/whisper-confidential/actions/runs/38567539780",
+  "expected_host_data": "a2966d8c4d42ffb11af7eaae8c10e8a31874c764934a59e514485e08fffca024",
+  "cpu_image": "harbor.speeches.dev/library/whisper-confidential-cpu@sha256:f8167403f3524267e62e9127aab4546d13f7beb3d38b7f8adf9094864de19752",
+  "results": {
+    "pipeline_two_builds_equal": true,
+    "anonymous_registry_pull": true,
+    "amd_signature_and_pinned_guest_verified": true,
+    "cpu_session_key_and_workload_verified": true,
+    "operator_exec_rejected": true,
+    "wrong_image_rejected": true,
+    "wrong_python_configuration_rejected": true,
+    "wrong_start_command_rejected": true,
+    "wrong_expected_hostdata_rejected": true,
+    "attestation_agent_not_exposed_to_host_network": true,
+    "encrypted_audio_and_transcript": true,
+    "real_release_cuda_transcription": true,
+    "public_and_local_browser_tests": true
+  },
+  "gpu_attestation_verified": false,
+  "full_confidentiality_verified": false
+}

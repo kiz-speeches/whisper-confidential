@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "version": "v0.2.0-policy",
+  "git_commit": "920aaa1cf3692a6c0a512178c34fe762443af869",
+  "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
+  "expected_host_data": "a2966d8c4d42ffb11af7eaae8c10e8a31874c764934a59e514485e08fffca024",
+  "cpu_image": "harbor.speeches.dev/library/whisper-confidential-cpu@sha256:f8167403f3524267e62e9127aab4546d13f7beb3d38b7f8adf9094864de19752",
+  "policy_sha256": "5a85e510606ff97db323394acf71bc40cbbea7e3ba2eac41970029027d68d8ee",
+  "verification_scope": "cpu_guest_session_key_and_cpu_workload",
+  "gpu_verified": false
+}

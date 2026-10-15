@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "version": "v0.2.0-policy",
+  "git_commit": "920aaa1cf3692a6c0a512178c34fe762443af869",
+  "source_date_epoch": 1791982474,
+  "source_tree_sha256": "bd8f9f90df2c47436a83a7d4894d7ddc5ffa088d79898b5c3b7f27c6f923179e",
+  "source_files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "46ebf95927ca7d30295d65295dc06ba6474a6ef1e130230a738947bb42f31ad4",
+      "executable": false
+    },
+    {
+      "path": ".github/workflows/checks.yml",
+      "sha256": "0ab94d2e8ff4470fa77877a698be9ae661fcb7c96dae4e72eb1b05e154d26a25",
+      "executable": false
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "21a8d3bd36555949204dca0fd97b118050b1a4ddd5684a333338a42cdc5f8783",
+      "executable": false
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "f24ce5e786ba16e4ff8d632c83d63e06391faeb085b8cd3606e8904c03f069c2",
+      "executable": false
+    },
+    {
+      "path": "README.md",
+      "sha256": "fa16f004f87284585ee29ffdc3820f7b7314581b755c43d1c49dc13618458359",
+      "executable": false
+    },
+    {
+      "path": "build/inputs.json",
+      "sha256": "85b9deee831bd41b6a072707b63ff0ae9aa055d0f8c85f74fc8cde2089b67386",
+      "executable": false
+    },
+    {
+      "path": "cpu/Dockerfile",
+      "sha256": "16fec57e502a342f75691cc4dce47e147644ac4bf54da4dce8d9944083db6146",
+      "executable": false
+    },
+    {
+      "path": "cpu/api.py",
+      "sha256": "4b10702d0ab377e9aa23c6b9e472697970c84aa2573f6c9726a4786382153ca8",
+      "executable": false
+    },
+    {
+      "path": "cpu/evidence.py",
+      "sha256": "f45010202ef07fd5ded8e142a22e619807c784505e10c090e2c7790c90253ac0",
+      "executable": false
+    },
+    {
+      "path": "cpu/requirements.lock",
+      "sha256": "29795c666fba422b827024387fcdd8cc338a223b888d24d751b23b9de8bad24f",
+      "executable": false
+    },
+    {
+      "path": "gpu/Dockerfile",
+      "sha256": "2cb4ba159586617b0fa71d20a9daaf613e1e4e7eb8a3996774ed3e50c9633321",
+      "executable": false
+    },
+    {
+      "path": "gpu/api.py",
+      "sha256": "7bbf7b1b7e2aa393ecf389cfb1b3ce8262f47ba797a2b7bd98dc2b781bbc9f8b",
+      "executable": false
+    },
+    {
+      "path": "gpu/prepare_model.py",
+      "sha256": "1d42ed36b33e4bba780809b6781e6ce497be446012e9d57c63e85aa55c6df927",
+      "executable": false
+    },
+    {
+      "path": "gpu/requirements.lock",
+      "sha256": "5e996394d3605e2b3d786b5ed542ceb78fd623eb4adce4faf076ac3f257b3cee",
+      "executable": false
+    },
+    {
+      "path": "gpu/verify_model.py",
+      "sha256": "b7a074b7f38d7e09069ad0876c8e3862b45becf80744ce7b99686d909aacc58d",
+      "executable": false
+    },
+    {
+      "path": "policy/contract.json",
+      "sha256": "af54866a8e72265021d9e282309309430665bc6f8b02485467c651ad529ebb3a",
+      "executable": false
+    },
+    {
+      "path": "tests/fixtures/jfk.flac",
+      "sha256": "63a4b1e4c1dc655ac70961ffbf518acd249df237e5a0152faae9a4a836949715",
+      "executable": false
+    },
+    {
+      "path": "tests/test_gateway.py",
+      "sha256": "3cd8858fb8c3dcf0e92d4266ed18d2cddb3ab7b6ec6ce0ffe78e40d9d0509f93",
+      "executable": false
+    },
+    {
+      "path": "tests/test_model.py",
+      "sha256": "cdf5e7181044e7f7caed769e2923a73339db1e248848d37c46800667b27f89a3",
+      "executable": false
+    },
+    {
+      "path": "tests/test_policy.py",
+      "sha256": "5603734490ef5f244e1fcdfdea35ea237ae9016ddb189c4d3d582af6dd35f914",
+      "executable": false
+    },
+    {
+      "path": "tests/test_release.py",
+      "sha256": "5bf42d634f2629bbb94f6f8222ff56a9d7601ca8dec0bfae2696c586052878b3",
+      "executable": false
+    },
+    {
+      "path": "tools/build.py",
+      "sha256": "050ab9d3292b44c831f2998702e7a7abc14f1075da0b3771bd221c4b38ea4680",
+      "executable": false
+    },
+    {
+      "path": "tools/policy.py",
+      "sha256": "bdd97429b7860bdc7b07ae383d693273013ad3e3049dac05f3291243a09baf7d",
+      "executable": false
+    },
+    {
+      "path": "tools/publish.py",
+      "sha256": "52b914a620e50a487d23482cc94e70254ee36c05abf5883274107bcd3f2c4294",
+      "executable": false
+    },
+    {
+      "path": "tools/release.py",
+      "sha256": "f89203d88606b03f69fb4098f27819b070e6be77b60c92911989d00b78c6b908",
+      "executable": false
+    }
+  ],
+  "build_inputs": {
+    "platform": "linux/amd64",
+    "python_base": "python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b",
+    "model": {
+      "repository": "Systran/faster-whisper-small",
+      "revision": "536b0662742c02347bc0e980a01041f333bce120",
+      "files": [
+        {
+          "path": "config.json",
+          "sha256": "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828",
+          "git_blob_sha1": "e5047537059bd8f182d9ca64c470201585015187"
+        },
+        {
+          "path": "model.bin",
+          "sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671",
+          "git_blob_sha1": "504a7fe023f19460564a623887a9f77ea53ac708"
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+          "git_blob_sha1": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+        },
+        {
+          "path": "vocabulary.txt",
+          "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913",
+          "git_blob_sha1": "c9074644d9d1205686f16d411564729461324b75"
+        }
+      ]
+    },
+    "buildkit_image": "moby/buildkit:v0.30.0@sha256:0168606be2315b7c807a03b3d8aa79beefdb31c98740cebdffdfeebf31190c9f",
+    "cpu_guest_reference": {
+      "kata_release": "3.32.0",
+      "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
+      "ovmf_sha256": "d9bbf4c9279c89e4dfc7b90d8a1d42440bc9b8022a9cdb86ab4d5449b51892a7",
+      "kernel_sha256": "85ac495fce6bb6ee01206c8e022b65acad45ca3fcc2729ba377af33943c8b05e",
+      "guest_image_sha256": "240d9df4514472a7467afab6d99e6544667a0c3f05a54a2eaef60f45e40f1aea",
+      "origin": "administrator-recorded existing reference; not a claim of independently reproduced VM measurement"
+    },
+    "registry_copy_image": "quay.io/skopeo/stable@sha256:22ea3c3baf639147b07fb9f2ea28a6308edf7909e919d91a5d296af0121d7ed9",
+    "policy_tools": {
+      "version": "3.32.0",
+      "url": "https://github.com/kata-containers/kata-containers/releases/download/3.32.0/kata-tools-static-3.32.0-amd64.tar.zst",
+      "sha256": "f11a49d7a15f81a7ec3289293fa44ebe9c29610b6578535b35f1d604f22d6015"
+    },
+    "registry_prefix": "harbor.speeches.dev/library/whisper-confidential"
+  },
+  "versions": {
+    "cpu_packages": {
+      "annotated-doc": "0.0.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "certifi": "2026.7.22",
+      "cffi": "2.1.1",
+      "click": "8.5.0",
+      "cryptography": "46.0.5",
+      "fastapi": "0.143.0",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.20",
+      "opentelemetry-api": "1.45.1",
+      "pycparser": "3.11",
+      "pydantic": "2.14.1",
+      "pydantic-core": "2.50.1",
+      "starlette": "1.8.0",
+      "typing-extensions": "4.16.0",
+      "typing-inspection": "0.4.4",
+      "uvicorn": "0.54.0"
+    },
+    "gpu_packages": {
+      "annotated-doc": "0.0.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "av": "16.0.1",
+      "click": "8.5.0",
+      "ctranslate2": "4.8.2",
+      "fastapi": "0.143.0",
+      "faster-whisper": "1.2.1",
+      "filelock": "4.1.0",
+      "flatbuffers": "25.12.19",
+      "fsspec": "2026.9.0",
+      "h11": "0.16.0",
+      "hf-xet": "1.7.0",
+      "httpcore2": "2.13.1",
+      "httpx2": "2.13.1",
+      "huggingface-hub": "2.2.0",
+      "idna": "3.20",
+      "numpy": "2.5.4",
+      "nvidia-cublas-cu12": "12.9.2.10",
+      "nvidia-cuda-nvrtc-cu12": "12.9.86",
+      "nvidia-cudnn-cu12": "9.27.0.42",
+      "onnxruntime": "1.31.0",
+      "opentelemetry-api": "1.45.1",
+      "packaging": "26.3",
+      "protobuf": "7.36.2",
+      "pydantic": "2.14.0",
+      "pydantic-core": "2.50.0",
+      "python-multipart": "0.0.32",
+      "pyyaml": "6.0.3",
+      "starlette": "1.7.0",
+      "tokenizers": "0.23.3",
+      "tqdm": "4.70.1",
+      "truststore": "0.10.4",
+      "typing-extensions": "4.16.0",
+      "typing-inspection": "0.4.4",
+      "uvicorn": "0.54.0"
+    }
+  },
+  "attestation": {
+    "workload_policy_enforced": false,
+    "expected_host_data": "a2966d8c4d42ffb11af7eaae8c10e8a31874c764934a59e514485e08fffca024",
+    "gpu_evidence": null,
+    "software_versions_verified": false,
+    "policy_sha256": "5a85e510606ff97db323394acf71bc40cbbea7e3ba2eac41970029027d68d8ee",
+    "binding_status": "generated; client must verify signed HOST_DATA"
+  },
+  "images": {
+    "cpu_gateway": {
+      "platform_digest": "sha256:f8167403f3524267e62e9127aab4546d13f7beb3d38b7f8adf9094864de19752",
+      "archive_sha256": "5301a9eff38c3e343bfe0dae7850ab762b31f7553ff0e866da7d8266b66ca934",
+      "registry_reference": "harbor.speeches.dev/library/whisper-confidential-cpu@sha256:f8167403f3524267e62e9127aab4546d13f7beb3d38b7f8adf9094864de19752"
+    },
+    "gpu_worker": {
+      "platform_digest": "sha256:f34537084c07f07c74197a8402fc2614c5560b61db0294cad74a308f8ce58ed2",
+      "archive_sha256": "19584bfb577103bbe10c9c80f037c8a7af14070cdb26b131994917f8fcc408e8",
+      "registry_reference": "harbor.speeches.dev/library/whisper-confidential-gpu@sha256:f34537084c07f07c74197a8402fc2614c5560b61db0294cad74a308f8ce58ed2"
+    }
+  }
+}
