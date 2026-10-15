@@ -7,12 +7,12 @@ from policy import generate
 ROOT=Path(__file__).resolve().parent.parent
 REPO='kiz-speeches/whisper-confidential'
 
-def github(path, token, data=None, content_type='application/json'):
+def github(path, token, data=None, content_type='application/json', method=None):
     url=path if path.startswith('https://') else 'https://api.github.com/repos/'+REPO+'/'+path
     if isinstance(data,dict):data=json.dumps(data).encode()
     request=urllib.request.Request(url,data=data,headers={'Authorization':'Bearer '+token,
         'Accept':'application/vnd.github+json','Content-Type':content_type,
-        'X-GitHub-Api-Version':'2022-11-28'})
+        'X-GitHub-Api-Version':'2022-11-28'},method=method)
     with urllib.request.urlopen(request,timeout=90) as response:return json.load(response)
 
 def main():
@@ -56,16 +56,31 @@ def main():
            dist/'policy-input.json',dist/'policy-settings.json']
     sums=dist/'SHA256SUMS';sums.write_text(''.join(
         hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in files))
+    release=publish_release(token,manifest,files+[sums])
+    print('Published private prerelease:',release['html_url'])
+
+def publish_release(token, manifest, files):
+    version=manifest['version']
     release=github('releases',token,{'tag_name':version,'target_commitish':manifest['git_commit'],
-        'name':version,'draft':True,'body':
+        'name':version,'draft':True,'prerelease':True,'body':
         'Images are pinned by digest in release-manifest.json. '
         'Rebuilds must match both OCI platform digests. policy.rego and initdata.toml bind the CPU '
         'image and launch configuration. Compare signed SNP HOST_DATA to attestation-policy.json '
         'obtained from this trusted release. GPU processing is currently not confidential. '
         'Generation alone is not evidence of deployment or successful hardware tests.'})
-    for path in files+[sums]:
-        github(release['upload_url'].split('{',1)[0]+'?name='+path.name,token,path.read_bytes(),
-               'application/octet-stream')
-    print('Private release draft:',release['html_url'])
+    for path in files:
+        content=path.read_bytes()
+        uploaded=github(release['upload_url'].split('{',1)[0]+'?name='+path.name,token,content,
+                        'application/octet-stream')
+        if (uploaded.get('state')!='uploaded' or uploaded.get('name')!=path.name
+                or uploaded.get('size')!=len(content)
+                or uploaded.get('digest')!='sha256:'+hashlib.sha256(content).hexdigest()):
+            raise ValueError('Release asset upload verification failed: '+path.name)
+    # Partial or failed uploads remain drafts; complete builds publish automatically.
+    published=github('releases/'+str(release['id']),token,
+                     {'draft':False,'prerelease':True,'make_latest':'false'},method='PATCH')
+    if published.get('draft') is not False or published.get('prerelease') is not True:
+        raise ValueError('Release publication was not confirmed')
+    return published
 
 if __name__=='__main__':main()
