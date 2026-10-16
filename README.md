@@ -11,6 +11,29 @@ Dieses Repository macht den Container-Code, seine festen Build-Eingaben und die 
 
 Beide Images enthalten daneben ihre Python-Abhängigkeiten; das GPU-Image benötigt außerdem die Whisper-Modellgewichte. `gpu/prepare_model.py` läuft nur beim Build und landet nicht im fertigen Image. Die Docker-Build-Kontexte erlauben ausdrücklich nur die benötigten Dateien.
 
+## Welche JSON- und Policy-Dateien sind wofür?
+
+Zum Ändern des Systems sind vor allem diese drei Dateien relevant:
+
+| Datei | Zweck | Bearbeitung |
+| --- | --- | --- |
+| `build/inputs.json` | Legt Build-Werkzeuge, Basis-Images und Modell-Dateihashes fest. | Bewusst bei einem neuen Build ändern. |
+| `policy/contract.json` | Beschreibt den erlaubten CPU-Start: Befehl, Umgebung und Sicherheitsregeln. | Bewusst bei einer Änderung der Startregeln ändern. |
+| `verification/accepted.json` | Gibt gemessene CPU-Umgebungen samt Policy für den Client frei und verweist auf ihre Nachweise. | Nach Prüfung eines Softwarestands freigeben oder zurückziehen. |
+
+Die Dateien unter `verification/releases/…` sind eingefrorene Ergebnisse eines Builds bzw. seiner Prüfung:
+
+| Datei | Zweck |
+| --- | --- |
+| `initdata.toml` | Das Paket für Kata; enthält die komplette Policy. Sein SHA256 steht im signierten `HOST_DATA`. |
+| `policy.rego` | Dieselbe Policy einzeln zum Lesen. Legt unter anderem den erlaubten CPU-Image-Digest fest. |
+| `attestation-policy.json` | Kompakte Zusammenfassung von Gastmessung, InitData-/Policy-Hash und CPU-Image. Der Client gleicht sie mit den tatsächlichen Dateien ab. |
+| `release-manifest.json` | Build-Protokoll: Quellen, Abhängigkeiten, Modell-Dateihashes und fertige Image-Digests. |
+| `hardware-validation.json` | Zusammenfassung der durchgeführten Hardwaretests; kein signierter AMD-Report. |
+| `SHA256SUMS` | Prüfsummen der abgelegten Nachweisdateien. |
+
+Die vollständige Policy steht deshalb zweimal da: eingebettet für Kata und separat zum Lesen. Diese Nachweisdateien werden erzeugt und anschließend unverändert aufgehoben. Sie sind keine zusätzlichen Dienste und werden nicht in die API-Container kopiert. Die Pipeline erzeugt außerdem temporäre Generator-Eingaben wie `policy-input.json` und `policy-settings.json`; sie sind Build-Hilfen, keine weiteren Laufzeitkonfigurationen.
+
 ## APIs
 
 Beide Dienste bieten `GET /health`, `GET /v1/runtime` und `POST /v1/audio/transcriptions`. Die GPU nimmt eine Multipart-Audiodatei und `language` (`de`, `en`, `auto`) entgegen. Die CPU nimmt ausschließlich verschlüsselte Audiodaten einer vorher attestierten Sitzung entgegen. Dafür liefert `POST /v1/attestation` CPU-Evidence und den gebundenen öffentlichen Sitzungsschlüssel. Die kryptografischen API-Tests zeigen den ECDH/HKDF/AES-GCM-Ablauf. Es gibt keine HTML-, Static-, Swagger- oder Browser-Routen.
