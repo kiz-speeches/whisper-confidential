@@ -2,6 +2,16 @@
 
 Dieser Ordner enthält die überprüfbaren Referenzdateien veröffentlichter Builds. Er wird nicht in die Container kopiert. Der [Snapshot für v0.2.0-policy](releases/v0.2.0-policy/README.md) enthält die unveränderten Release-Dateien und eine getrennt gekennzeichnete Zusammenfassung der Hardwaretests vom 14. Oktober 2026.
 
+## Dynamische Nachweissuche
+
+Der externe Client kennt nur die Identität dieses öffentlichen GitHub-Repositories und seinen AMD-Vertrauensanker. Er enthält keine Liste akzeptierter Gast-, Policy- oder Image-Hashes. Nach Prüfung von AMD-Signatur und Sitzungsbindung löst er `main` einmal zu einem vollständigen Commit auf und liest `verification/accepted.json` sowie alle weiteren Dateien ausschließlich an diesem Commit. Der erste kryptografische Schritt bestätigt die Herkunft der Messwerte; er allein gibt keine Software frei.
+
+`accepted.json` ordnet einem Paar aus signierter Gastmessung und signiertem `HOST_DATA` genau einen Nachweisordner zu. Dort lädt der Client `attestation-policy.json`, `initdata.toml` und `policy.rego`. Er berechnet den Hash der exakten InitData-Bytes, vergleicht ihn mit `HOST_DATA`, prüft die byteidentische eingebettete Policy und ihren Hash und gleicht den CPU-Image-Digest mit dem unterstützten Policy-Vertrag ab. Unbekannte, mehrdeutige oder inkonsistente Einträge und fehlgeschlagene GitHub-Abrufe sperren Audio. Der Nachweisordner im bestehenden Release bleibt unverändert.
+
+Die Freigabeautorität ist der festgelegte GitHub-Repository-Stand über HTTPS. Es gibt derzeit keine zusätzliche signierte Freigabemetadaten-, Ablauf- oder Rollback-Logik. Einträge in `accepted.json` werden bewusst als Quellenänderung freigegeben; der Build-/Release-Workflow aktualisiert sie nicht automatisch. Der geschützte Branch muss Pushes durch Build-Runner-/Actions-App-Tokens ausschließen. Repository-Administratoren und die zugelassenen menschlichen Maintainer bleiben vertrauenswürdig. Ein schädlicher, aber bewusst freigegebener Quellstand wird durch Hashvergleiche nicht zu sicherem Code.
+
+Der Browser unterstützt das von `tools/policy.py` erzeugte exakte InitData-Format und den dazugehörigen gehärteten Policy-Vertrag. Er ist kein allgemeiner TOML- oder Rego-Interpreter. Die gemessene Gast-Implementierung muss die freigegebene Policy durchsetzen. Die Gastmessung dieses Prototyps ist weiterhin administrativ aufgezeichnet; das dynamische Nachschlagen ersetzt keinen reproduzierbaren VM-Build aus überprüften Quellen. Software-Versionsverwaltung und ein neuer Image-Release sind ein separater nächster Schritt.
+
 ## Welche Version ist gemeint?
 
 Eine Release-Version wie `v0.2.0-policy` ist ein lesbarer Name. Die verlässlichen Vergleichswerte sind der vollständige Quellcommit, die SHA256-Digests der Images und der erwartete SNP-`HOST_DATA`.
