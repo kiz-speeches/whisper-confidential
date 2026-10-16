@@ -84,6 +84,11 @@ class Protocol(unittest.TestCase):
         self.assertEqual(self.browser.post('/v1/audio/transcriptions', headers=headers, content=encrypted).status_code, 409)
         self.assertEqual(len(self.backend.audio), 1)
 
+    def test_attestation_envelope_contains_only_evidence_and_bound_session(self):
+        self.assertEqual(set(self.quote), {'evidence', 'server_public_key', 'session_id'})
+        self.assertEqual(len(base64.b64decode(self.quote['server_public_key'])), 65)
+        self.assertEqual(len(bytes.fromhex(self.quote['session_id'])), 16)
+
     def test_tampering_is_rejected_before_gpu(self):
         headers, encrypted = self.packet()
         bad = encrypted[:-1]+bytes([encrypted[-1]^1])

@@ -13,5 +13,3 @@
 !gpu/Dockerfile
 !build/
 !build/inputs.json
-!.build/
-!.build/build-info.json

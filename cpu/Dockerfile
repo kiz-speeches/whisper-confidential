@@ -6,7 +6,6 @@ LABEL org.opencontainers.image.source="https://github.com/kiz-speeches/whisper-c
 COPY cpu/requirements.lock /tmp/requirements.lock
 RUN --mount=from=wheels,target=/wheels pip install --no-cache-dir --no-compile --no-index --find-links=/wheels --only-binary=:all: --require-hashes -r /tmp/requirements.lock
 COPY cpu/api.py cpu/evidence.py /app/
-COPY .build/build-info.json /app/build-info.json
 USER 1000:1000
 EXPOSE 8080
 CMD ["python", "/app/api.py"]

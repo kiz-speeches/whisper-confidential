@@ -2,11 +2,9 @@
 import asyncio
 import base64
 import hashlib
-import json
 import os
 import secrets
 import time
-from pathlib import Path
 
 import httpx
 import uvicorn
@@ -18,7 +16,6 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from evidence import pack, b64
 
-ROOT = Path(__file__).parent
 GPU = os.environ.get('GPU_URL', 'http://whisper-gpu-prototype:8080')
 AA = 'http://127.0.0.1:8006/aa/evidence'
 DOMAIN = b'whisper-cpu-tee-v1'
@@ -77,15 +74,6 @@ async def headers(request, call_next):
     return response
 
 
-def software_release():
-    """Release metadata is informative until an enforced policy binds it to this workload."""
-    path = ROOT/'build-info.json'
-    if not path.is_file():
-        return None
-    return {'manifest': json.loads(path.read_text()), 'verified': False,
-            'binding': 'not_attested_to_workload'}
-
-
 @app.get('/health')
 async def health():
     try:
@@ -104,7 +92,7 @@ async def runtime():
             'confidential_computing': False, 'gpu_confidential_computing': False,
             'attestation_available': True, 'attestation_verified': False,
             'workload_policy_verified': False,
-            'notice': 'CPU-Guest und Sitzungsschlüssel prüfbar. GPU-Verarbeitung und Anwendungspolicy sind nicht attestiert.'}
+            'notice': 'CPU-Gast, Anwendungspolicy und Sitzungsschlüssel müssen vom Client geprüft werden. GPU-Verarbeitung ist nicht attestiert.'}
 
 
 @app.post('/v1/attestation')
@@ -143,13 +131,10 @@ async def attest(request: Request):
                 raise HTTPException(429, 'Too many active sessions')
             sessions[sid.hex()] = {'request': aes(b'request'), 'response': aes(b'response'),
                                    'expires': now+SESSION_TTL, 'sequence': -1}
-        return {'evidence': evidence, 'server_public_key': b64(public), 'session_id': sid.hex(),
-                'expires_in': SESSION_TTL, 'report_data': binding,
-                # Envelope metadata only: never insert a placeholder into signed AMD evidence.
-                'gpu_attestation': {'status': 'not_available', 'placeholder': True,
-                                    'evidence': None, 'verified': False,
-                                    'confidential_computing': False},
-                'software_release': software_release()}
+        # Evidence is verified against the client's AMD root and local references.
+        # Public key and session ID are bound by the signed REPORT_DATA. Release
+        # descriptions, verification verdicts and GPU placeholders do not belong here.
+        return {'evidence': evidence, 'server_public_key': b64(public), 'session_id': sid.hex()}
 
 
 @app.post('/v1/audio/transcriptions')
