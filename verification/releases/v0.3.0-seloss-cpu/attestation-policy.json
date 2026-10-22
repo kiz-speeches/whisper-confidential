@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "version": "v0.3.0-seloss-cpu",
+  "application": "seloss-v5",
+  "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
+  "expected_host_data": "04b43be953dc55aa6fbfadfdc4143b0ea7eea8889ac533ed0e92c03f79e21618",
+  "cpu_image": "harbor.speeches.dev/private-inference/asr-v5-cpu-tee@sha256:34546a45d832b57e3ae0e2dda4f43eaf0fe76909ce2dda8d738230eb412a352c",
+  "policy_sha256": "21594a8633e7d1cef1ef5348fd8d1f81fa8180ba7721267d66d11a1be749bc83",
+  "cdh_sha256": "c5745900b881970a6fa976e28bfb32b89bda5558c0bded9af030c54cd8b46b35",
+  "aa_sha256": "9f1dcedbf2ae0b284a032a6a6c369b93b5d53a6e54845d166b74c3da2dfa0794",
+  "kbs_url": "https://10.43.242.236:8080",
+  "kbs_certificate_pem": "-----BEGIN CERTIFICATE-----\nMIIEDjCCAnagAwIBAgIUd1Pvyno9OnlG0HF9hfKzIbsUum0wDQYJKoZIhvcNAQEL\nBQAwGjEYMBYGA1UEAwwPUHJpdmF0ZSBBU1IgS0JTMB4XDTI2MTAyMjA4MjQwMVoX\nDTI3MTAyMjA4MjkwMVowGjEYMBYGA1UEAwwPUHJpdmF0ZSBBU1IgS0JTMIIBojAN\nBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAoqHLSahQQ2m1mdqVP7rfkRxKsJah\nzmZ+BGGq2ax4nbuFNHFfjqXlEB2D0e4iE4O5geadyMPDy7rWUw9OiSx8YNvC3kdN\nThURe1HGdO5O+wsepDh+5No1ENXZC6KtXcg3QRvKMZSLY6MUgtaUT4QH2KAlNXWt\n5gxdjEa+hMEqxHr+PP6p7kU4r6HfbMSS0ZmweHC5vHwfjjjRgWC/6K0BFYF7f5w6\n5j8zxCTNlWclwlKkdA0CQWqIiErxtcBJrQyuc3PTyYKaznLKAW9i2/SxwEQBa99u\nS33hdVgiaMgKGV3rcvNn6mY+hL2NvKgV+7K8AfZDr3tEWCubOIOYeNYV5gQDars+\ntlqGgHdb2eXAFES1tGKwO7Y07tIZtcA6c/mP30qQ/NmXR2N6IoEm01L+PWpXTdC/\nY3YIwkBpJy5IZmO2HV7oLyV/eAOXbSzqmwzLJGEW5UPDpIo/zT5bvmHOvH5Z/NKT\niRtw4Hf3tJjn3fN5hGL8rxsGMPDqWRfglm5RAgMBAAGjTDBKMBIGA1UdEwEB/wQI\nMAYBAf8CAQAwDgYDVR0PAQH/BAQDAgGmMA8GA1UdEQQIMAaHBAor8uwwEwYDVR0l\nBAwwCgYIKwYBBQUHAwEwDQYJKoZIhvcNAQELBQADggGBACPHKhiCgpRY8I7lhGlu\nNgQ4IMTMdIxQgNKhT1Uk9SF+Dlk+25B8bRCKMXpbiWozcf3iJp8r1s8XFAVtfdku\nqjzRWkCvOJsHUltrhbbwzlj7MKJKN+VEhguFFzs1B9djJ4vXy9JuKrWNXdo2eoy4\n/th3fyuHWUFfhrd5uXE9BcONbc2UsfJHj04ls54X1BIFqY2tbMqz20bVkuSZ4AqP\n3KoqZl69Bn6h+tgT4AMKFoZUoTq7XHmzCcm4ZKHYUHth5CqokQB9sW5PM6B47dEa\nQhY/CJ/oG+3Ym9nO9mkLuo8f7O+UznpnlKUcWxj6vItDp0NXFpRXWFyky0c1/eWQ\ntRiSFk8C05Et6f8ONQxzFWN7Q4cAMktmSTMDPjXJS8UJ+IDjOuaHypwN6yyd1PL6\nFkFVKGhqIczu6mQ4ymG+YDxEbUieMebiC0aSPiIXk5fwLesjIeVc/vbbcCmpDboL\nf3VXe1bnXh52WlyTui590LhuxvzM8kU7sMXFglTzuEk5WA==\n-----END CERTIFICATE-----\n",
+  "registry_credentials_uri": "kbs:///default/registry-auth/asr-v5",
+  "verification_scope": "cpu_guest_session_key_cpu_application_and_bundled_model",
+  "gpu_verified": false,
+  "gpu_required": false,
+  "source_visibility": "proprietary; hashes do not provide public source auditing"
+}

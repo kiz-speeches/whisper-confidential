@@ -5,6 +5,11 @@
       "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
       "host_data": "a2966d8c4d42ffb11af7eaae8c10e8a31874c764934a59e514485e08fffca024",
       "path": "verification/releases/v0.2.0-policy"
+    },
+    {
+      "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
+      "host_data": "04b43be953dc55aa6fbfadfdc4143b0ea7eea8889ac533ed0e92c03f79e21618",
+      "path": "verification/releases/v0.3.0-seloss-cpu"
     }
   ]
 }
