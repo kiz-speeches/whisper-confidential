@@ -1,0 +1,16 @@
+{
+  "graphs": {
+    "frontend": {
+      "file": "frontend.onnx",
+      "sha256": "ae7585cdfcd299f5af195acc5797be3547c647ab570b32f737975259df25c78b"
+    },
+    "inference": {
+      "file": "inference.onnx",
+      "sha256": "eff2da1e7ac97eb45384f961783191025c643d158a970ab1292ef42f3fbba4ab"
+    }
+  },
+  "onnxruntime": "1.32.0",
+  "precision": "float32",
+  "schema_version": 1,
+  "source_checkpoint_sha256": "867c53f552998f772e5b5e5c082962ae85ee7ca5669c2bc17d7f615133d4e96d"
+}
