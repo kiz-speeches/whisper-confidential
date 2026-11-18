@@ -20,6 +20,11 @@
       "measurement": "127ac23ebaf9e97ecafa804aff9d56cc2398779fa06fadfa85700b8bf79377a37e98c5d566bd16fc7d821f6de60c20c2",
       "host_data": "c5dae9ffed1c7f98f81741e81cd5008f56d421a1e05f6dec5490554d428e7065",
       "path": "verification/releases/v0.3.3-seloss-live"
+    },
+    {
+      "measurement": "965b385c55e265ff54517252f4d4c383b1a7b1f966ecbda3ea3dd69682711f4416cc471fe552239ef03fcedf8f7725d1",
+      "host_data": "937f8809f515322ea8e09fea447edd78e51318f780655e8e762ec3f1e0b7fd07",
+      "path": "verification/releases/v0.3.4-seloss-multitalker"
     }
   ]
 }
