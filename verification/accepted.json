@@ -25,6 +25,11 @@
       "measurement": "965b385c55e265ff54517252f4d4c383b1a7b1f966ecbda3ea3dd69682711f4416cc471fe552239ef03fcedf8f7725d1",
       "host_data": "937f8809f515322ea8e09fea447edd78e51318f780655e8e762ec3f1e0b7fd07",
       "path": "verification/releases/v0.3.4-seloss-multitalker"
+    },
+    {
+      "measurement": "5d35768f852b9dfde225bd1e7c0c7cf3d8291ab24f4425db78e5df0636fb23160fc1e72377a74ae9e938fc7ca0d5a875",
+      "host_data": "e18a96ec2fda93b52a3e4f39f44758605f28621ce9ee8edeac6ead7d44c225e6",
+      "path": "verification/releases/v0.3.5-seloss-multitalker-dual"
     }
   ]
 }
